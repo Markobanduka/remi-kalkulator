@@ -15,7 +15,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -139,12 +138,6 @@ const Page = () => {
             Izracunaj
           </Button>
         </CardContent>
-        {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="leading-none text-muted-foreground">
-          Enter values to add to each month's visitors, then click Submit.
-          Lowest value is highlighted in red.
-        </div>
-      </CardFooter> */}
       </Card>
     </div>
   );
