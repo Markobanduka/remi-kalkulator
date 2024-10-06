@@ -16,7 +16,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  // CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -63,9 +63,9 @@ const Page = () => {
     <div className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-3xl">
         <CardHeader>
-          <CardTitle className="flex justify-center text-2xl">
+          {/* <CardTitle className="flex justify-center text-2xl">
             Remi Kalkulator
-          </CardTitle>
+          </CardTitle> */}
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
