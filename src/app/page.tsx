@@ -77,22 +77,25 @@ const Page = () => {
     setIsNameSet(true);
   };
 
-  // Handle score input changes after setup
   const handleInputChange = (month: string, value: string) => {
     const numValue = parseInt(value, 10) || 0;
     setInputValues((prev) => ({ ...prev, [month]: numValue }));
   };
 
-  // Handle submitting and cycling through players
   const handleSubmit = () => {
     const updatedChartData = chartData.map((item) => {
       const updatedVisitors = item.visitors + (inputValues[item.month] || 0);
-      const hasWon = updatedVisitors < 0;
 
+      console.log(inputValues[item.month]);
+
+      let newWins = item.wins;
+      if (inputValues[item.month] < 0) {
+        newWins += 1;
+      }
       return {
         ...item,
         visitors: updatedVisitors,
-        wins: hasWon ? item.wins + 1 : item.wins,
+        wins: newWins,
       };
     });
 
@@ -100,7 +103,6 @@ const Page = () => {
     setInputValues({});
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
   };
-
   return (
     <div className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-3xl">
