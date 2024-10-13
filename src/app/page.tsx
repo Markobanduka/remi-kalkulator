@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 import {
   Bar,
   BarChart,
@@ -44,6 +45,7 @@ const Page = () => {
   const [currentPersonIndex, setCurrentPersonIndex] = useState(0);
   const [isNameSet, setIsNameSet] = useState(false);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const minValue = Math.min(...chartData.map((item) => item.visitors));
   const maxValue = Math.max(...chartData.map((item) => item.visitors));
@@ -104,8 +106,45 @@ const Page = () => {
     setInputValues({});
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
   };
+
+  const scheduleAlertAt11PM = () => {
+    const now = new Date();
+    const alertTime = new Date();
+    alertTime.setHours(0, 26, 0, 0); // Set to 11:00 PM today
+
+    if (now > alertTime) {
+      // If it's already past 11 PM today, set to 11 PM tomorrow
+      alertTime.setDate(alertTime.getDate() + 1);
+    }
+
+    const timeUntil11PM = alertTime.getTime() - now.getTime();
+
+    // Set a timeout to show alert at 11 PM
+    setTimeout(() => {
+      const winner = chartData.find(
+        (item) => item.visitors === minValue
+      )?.month;
+
+      setShowConfetti(true);
+
+      // Display alert
+      alert(`Cestitamo ${winner} je pobedio/la sa ${minValue} poena!`);
+
+      // Hide confetti after 5 seconds
+      setTimeout(() => setShowConfetti(false), 25000);
+    }, timeUntil11PM);
+  };
+  useEffect(() => {
+    if (isNameSet) {
+      scheduleAlertAt11PM();
+    }
+  }, [isNameSet, chartData]); // Re-run if names are set or data changes
+
   return (
     <div className="flex justify-center items-center h-screen">
+      {showConfetti && (
+        <Confetti width={window.innerWidth} height={window.innerHeight} />
+      )}
       <Card className="w-full max-w-3xl">
         <CardHeader>
           <CardDescription></CardDescription>
