@@ -110,7 +110,7 @@ const Page = () => {
   const scheduleAlertAt11PM = () => {
     const now = new Date();
     const alertTime = new Date();
-    alertTime.setHours(0, 26, 0, 0); // Set to 11:00 PM today
+    alertTime.setHours(0, 32, 0, 0); // Set to 11:00 PM today
 
     if (now > alertTime) {
       // If it's already past 11 PM today, set to 11 PM tomorrow
@@ -120,23 +120,28 @@ const Page = () => {
     const timeUntil11PM = alertTime.getTime() - now.getTime();
 
     // Set a timeout to show alert at 11 PM
-    setTimeout(() => {
+
+    const timeoutId = setTimeout(() => {
       const winner = chartData.find(
         (item) => item.visitors === minValue
       )?.month;
 
       setShowConfetti(true);
 
-      // Display alert
       alert(`Cestitamo ${winner} je pobedio/la sa ${minValue} poena!`);
 
-      // Hide confetti after 5 seconds
       setTimeout(() => setShowConfetti(false), 25000);
     }, timeUntil11PM);
+
+    // Return the timeout ID for cleanup
+    return timeoutId;
   };
   useEffect(() => {
     if (isNameSet) {
-      scheduleAlertAt11PM();
+      const timeoutId = scheduleAlertAt11PM();
+
+      // Cleanup function to clear timeout if effect runs again (chartData or isNameSet changes)
+      return () => clearTimeout(timeoutId);
     }
   }, [isNameSet, chartData]); // Re-run if names are set or data changes
 
