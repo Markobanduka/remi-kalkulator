@@ -46,6 +46,7 @@ const Page = () => {
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
 
   const minValue = Math.min(...chartData.map((item) => item.visitors));
+  const maxValue = Math.max(...chartData.map((item) => item.visitors));
 
   // Handle name change during the setup
   const handleNameChange = (index: number, value: string) => {
@@ -71,7 +72,7 @@ const Page = () => {
     setChartData(
       chartData.map((item, index) => ({
         ...item,
-        month: names[index] || `Person ${index + 1}`,
+        month: names[index] || `Igrač ${index + 1}`,
       }))
     );
     setIsNameSet(true);
@@ -120,7 +121,7 @@ const Page = () => {
                     </Label>
                     {names.length > 1 && (
                       <button
-                        className="text-red-500"
+                        className="text-red-500 bg-slate-200 px-2 py-1 rounded-md font-bold"
                         onClick={() => handleRemovePlayer(index)}
                       >
                         X
@@ -186,8 +187,10 @@ const Page = () => {
                         key={item.month}
                         fill={
                           item.visitors === minValue
+                            ? "hsl(var(--primary))"
+                            : item.visitors === maxValue
                             ? "hsl(var(--destructive))"
-                            : "hsl(var(--primary))"
+                            : "hsl(var(--blue))"
                         }
                       />
                     ))}
