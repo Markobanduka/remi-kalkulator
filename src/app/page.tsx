@@ -34,7 +34,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const audioFilePath = "/ljuba.mp3";
+
 const Page = () => {
+  const [audio] = useState(new Audio(audioFilePath));
+
   const [chartData, setChartData] = useState([
     { month: "", visitors: 0, wins: 0 },
     { month: "", visitors: 0, wins: 0 },
@@ -110,7 +114,7 @@ const Page = () => {
   const scheduleAlertAt11PM = () => {
     const now = new Date();
     const alertTime = new Date();
-    alertTime.setHours(0, 32, 0, 0); // Set to 11:00 PM today
+    alertTime.setHours(1, 41, 0, 0); // Set to 11:00 PM today
 
     if (now > alertTime) {
       // If it's already past 11 PM today, set to 11 PM tomorrow
@@ -129,6 +133,9 @@ const Page = () => {
       setShowConfetti(true);
 
       alert(`Cestitamo ${winner} je pobedio/la sa ${minValue} poena!`);
+      audio.play().catch((error) => {
+        console.error("Error playing audio:", error);
+      });
 
       setTimeout(() => setShowConfetti(false), 25000);
     }, timeUntil11PM);
