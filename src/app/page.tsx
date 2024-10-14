@@ -114,16 +114,13 @@ const Page = () => {
   const scheduleAlertAt11PM = () => {
     const now = new Date();
     const alertTime = new Date();
-    alertTime.setHours(2, 5, 0, 0); // Set to 11:00 PM today
+    alertTime.setHours(2, 11, 0, 0);
 
     if (now > alertTime) {
-      // If it's already past 11 PM today, set to 11 PM tomorrow
       alertTime.setDate(alertTime.getDate() + 1);
     }
 
     const timeUntil11PM = alertTime.getTime() - now.getTime();
-
-    // Set a timeout to show alert at 11 PM
 
     const timeoutId = setTimeout(() => {
       const winner = chartData.find(
