@@ -114,7 +114,7 @@ const Page = () => {
   const scheduleAlertAt11PM = () => {
     const now = new Date();
     const alertTime = new Date();
-    alertTime.setHours(2, 15, 0, 0);
+    alertTime.setHours(23, 0, 0, 0);
 
     if (now > alertTime) {
       alertTime.setDate(alertTime.getDate() + 1);
