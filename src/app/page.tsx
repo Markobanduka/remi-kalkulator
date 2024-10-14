@@ -37,7 +37,7 @@ const chartConfig = {
 const audioFilePath = "/ljuba.mp3";
 
 const Page = () => {
-  const [audio] = useState(new Audio(audioFilePath));
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   const [chartData, setChartData] = useState([
     { month: "", visitors: 0, wins: 0 },
@@ -114,7 +114,7 @@ const Page = () => {
   const scheduleAlertAt11PM = () => {
     const now = new Date();
     const alertTime = new Date();
-    alertTime.setHours(1, 46, 0, 0); // Set to 11:00 PM today
+    alertTime.setHours(2, 5, 0, 0); // Set to 11:00 PM today
 
     if (now > alertTime) {
       // If it's already past 11 PM today, set to 11 PM tomorrow
@@ -133,9 +133,11 @@ const Page = () => {
       setShowConfetti(true);
 
       alert(`Cestitamo ${winner} je pobedio/la sa ${minValue} poena!`);
-      audio.play().catch((error) => {
-        console.error("Error playing audio:", error);
-      });
+      if (audio) {
+        audio.play().catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+      }
 
       setTimeout(() => setShowConfetti(false), 25000);
     }, timeUntil11PM);
@@ -144,10 +146,12 @@ const Page = () => {
     return timeoutId;
   };
   useEffect(() => {
+    // Initialize audio only on the client side
+    const audioInstance = new Audio(audioFilePath);
+    setAudio(audioInstance);
+
     if (isNameSet) {
       const timeoutId = scheduleAlertAt11PM();
-
-      // Cleanup function to clear timeout if effect runs again (chartData or isNameSet changes)
       return () => clearTimeout(timeoutId);
     }
   }, [isNameSet, chartData]); // Re-run if names are set or data changes
