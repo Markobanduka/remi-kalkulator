@@ -1,5 +1,5 @@
 "use client";
-
+import { RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import {
@@ -51,6 +51,11 @@ const Page = () => {
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  const [previousChartData, setPreviousChartData] = useState(chartData);
+  const [previousPersonIndex, setPreviousPersonIndex] =
+    useState(currentPersonIndex);
+  const [isUndoDisabled, setIsUndoDisabled] = useState(true);
+
   const minValue = Math.min(...chartData.map((item) => item.visitors));
   const maxValue = Math.max(...chartData.map((item) => item.visitors));
 
@@ -90,10 +95,9 @@ const Page = () => {
   };
 
   const handleSubmit = () => {
+    setPreviousChartData([...chartData]);
     const updatedChartData = chartData.map((item) => {
       const updatedVisitors = item.visitors + (inputValues[item.month] || 0);
-
-      console.log(inputValues[item.month]);
 
       let newWins = item.wins;
       if (inputValues[item.month] < 0) {
@@ -108,7 +112,14 @@ const Page = () => {
 
     setChartData(updatedChartData);
     setInputValues({});
+    setPreviousPersonIndex(currentPersonIndex);
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
+    setIsUndoDisabled(false);
+  };
+
+  const handleUndo = () => {
+    setChartData(previousChartData);
+    setCurrentPersonIndex(previousPersonIndex);
   };
 
   const scheduleAlertAt11PM = () => {
@@ -275,9 +286,18 @@ const Page = () => {
                   </div>
                 ))}
               </div>
-              <Button onClick={handleSubmit} className="w-full mt-4">
-                Izracunaj
-              </Button>
+              <div className="flex space-x-4 mt-4">
+                <Button onClick={handleSubmit} className="w-full">
+                  Izracunaj
+                </Button>
+                <Button
+                  onClick={handleUndo}
+                  className="w-1/6 bg-yellow-500 hover:bg-yellow-400"
+                  disabled={isUndoDisabled}
+                >
+                  <RotateCcw />
+                </Button>
+              </div>
             </>
           )}
         </CardContent>
