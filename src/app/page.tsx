@@ -120,6 +120,7 @@ const Page = () => {
   const handleUndo = () => {
     setChartData(previousChartData);
     setCurrentPersonIndex(previousPersonIndex);
+    setIsUndoDisabled(true);
   };
 
   const scheduleAlertAt11PM = () => {
@@ -266,7 +267,7 @@ const Page = () => {
                     key={item.month}
                     className={`flex flex-col space-y-2 p-2 ${
                       index === currentPersonIndex
-                        ? "border-2 border-green-500"
+                        ? "border-4 border-dashed border-green-500"
                         : "border border-gray-300"
                     }`}
                   >
