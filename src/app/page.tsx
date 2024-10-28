@@ -178,17 +178,24 @@ const Page = () => {
           {!isNameSet ? (
             <div className="grid grid-cols-4 gap-4 mt-6">
               {names.map((name, index) => (
-                <div key={index} className="flex flex-col space-y-2">
+                <div
+                  key={index}
+                  className="flex flex-col space-y-2 col-span-4 md:col-span-2 lg:col-span-1 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+                >
                   <div className="flex justify-between items-center">
-                    <Label htmlFor={`name-input-${index}`}>
+                    <Label
+                      htmlFor={`name-input-${index}`}
+                      className="font-semibold text-gray-700"
+                    >
                       Igrač {index + 1}
                     </Label>
                     {names.length > 1 && (
                       <button
-                        className="text-red-500 bg-slate-200 px-2 py-1 rounded-md font-bold"
+                        className="text-red-500 bg-gray-100 hover:bg-red-100 focus:ring-2 focus:ring-red-300 transition-all duration-150 ease-in-out px-2 py-1 rounded-md font-bold"
                         onClick={() => handleRemovePlayer(index)}
+                        aria-label={`Remove player ${index + 1}`}
                       >
-                        X
+                        ✕
                       </button>
                     )}
                   </div>
@@ -198,12 +205,13 @@ const Page = () => {
                     placeholder={`Unesi ime igrača ${index + 1}`}
                     value={name}
                     onChange={(e) => handleNameChange(index, e.target.value)}
+                    className="border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-green-500 focus:outline-none"
                   />
                 </div>
               ))}
               <Button
                 onClick={handleSetNames}
-                className="w-full mt-4 col-span-4"
+                className="w-full mt-4 col-span-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md shadow-md transition-all duration-150 ease-in-out"
               >
                 Počni igru
               </Button>
