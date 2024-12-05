@@ -13,6 +13,8 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+// Metadata
+
 export const metadata: Metadata = {
   title: "Remi Kalkulator",
   description: "Aplikacija za racunanje rezultata u remiju",
