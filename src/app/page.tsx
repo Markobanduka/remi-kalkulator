@@ -40,10 +40,10 @@ const Page = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   const [chartData, setChartData] = useState([
-    { month: "", visitors: 0, wins: 0 },
-    { month: "", visitors: 0, wins: 0 },
-    { month: "", visitors: 0, wins: 0 },
-    { month: "", visitors: 0, wins: 0 },
+    { month: "", visitors: 0, wins: 0, hands: 0 },
+    { month: "", visitors: 0, wins: 0, hands: 0 },
+    { month: "", visitors: 0, wins: 0, hands: 0 },
+    { month: "", visitors: 0, wins: 0, hands: 0 },
   ]);
   const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
   const [currentPersonIndex, setCurrentPersonIndex] = useState(0);
@@ -114,14 +114,19 @@ const Page = () => {
     const updatedChartData = chartData.map((item) => {
       const updatedVisitors = item.visitors + (inputValues[item.month] || 0);
 
+      let hand = item.hands;
       let newWins = item.wins;
       if (inputValues[item.month] < 0) {
         newWins += 1;
+      }
+      if (inputValues[item.month] < -50) {
+        hand += 1;
       }
       return {
         ...item,
         visitors: updatedVisitors,
         wins: newWins,
+        hands: hand,
       };
     });
 
@@ -269,7 +274,7 @@ const Page = () => {
                       dataKey="visitors"
                       position="center"
                       fill="hsl(var(--primary-foreground))"
-                      style={{ fontWeight: "bold", fontSize: "16px" }}
+                      style={{ fontWeight: "bold", fontSize: "48px" }}
                     />
                     {chartData.map((item) => (
                       <Cell
@@ -292,11 +297,16 @@ const Page = () => {
                     key={item.month}
                     className={`flex flex-col space-y-2 p-2 ${
                       index === currentPersonIndex
-                        ? "border-4 border-dashed border-green-500"
+                        ? "border-8 border-solid border-green-500"
                         : "border border-gray-300"
                     }`}
                   >
-                    <Label htmlFor={`input-${item.month}`}>{item.month}</Label>
+                    <Label
+                      className="font-bold tracking-wider text-base"
+                      htmlFor={`input-${item.month}`}
+                    >
+                      {item.month}
+                    </Label>
                     <Input
                       id={`input-${item.month}`}
                       type="number"
@@ -307,7 +317,13 @@ const Page = () => {
                       }
                     />
                     <div className="text-sm text-gray-500 font-bold">
-                      Pobede: {item.wins}
+                      Pobede:{" "}
+                      <span className="font-bold font-mono text-xl">
+                        {item.wins}
+                      </span>
+                      <span className="ml-5 text-red-600 font-bold font-mono text-lg">
+                        ({item.hands})
+                      </span>
                     </div>
                   </div>
                 ))}
