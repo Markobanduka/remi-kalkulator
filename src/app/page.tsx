@@ -56,6 +56,9 @@ const Page = () => {
     useState(currentPersonIndex);
   const [isUndoDisabled, setIsUndoDisabled] = useState(true);
 
+  // const [showScores, setShowScores] = useState(true);
+  // const [scoreHistory, setScoreHistory] = useState<any[]>([]);
+
   const minValue = Math.min(...chartData.map((item) => item.visitors));
   const maxValue = Math.max(...chartData.map((item) => item.visitors));
 
@@ -86,13 +89,25 @@ const Page = () => {
         month: names[index] || `Igrač ${index + 1}`,
       }))
     );
+    // setScoreHistory((prevHistory) => [
+    //   ...prevHistory,
+    //   chartData.map((item) => item.visitors),
+    // ]);
+
     setIsNameSet(true);
   };
-
   const handleInputChange = (month: string, value: string) => {
     const numValue = parseInt(value, 10) || 0;
     setInputValues((prev) => ({ ...prev, [month]: numValue }));
   };
+  // useEffect(() => {
+  //   if (chartData.length > 0) {
+  //     setScoreHistory((prevHistory) => [
+  //       ...prevHistory,
+  //       chartData.map((item) => item.visitors),
+  //     ]);
+  //   }
+  // }, [chartData]);
 
   const handleSubmit = () => {
     setPreviousChartData([...chartData]);
@@ -109,6 +124,8 @@ const Page = () => {
         wins: newWins,
       };
     });
+
+    // setChartData(updatedChartData);
 
     setChartData(updatedChartData);
     setInputValues({});
@@ -307,6 +324,38 @@ const Page = () => {
                   <RotateCcw />
                 </Button>
               </div>
+              {/* {showScores && (
+                <div className="mt-4">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr>
+                        {names.map((name, index) => (
+                          <th
+                            key={index}
+                            className="border px-4 py-2 text-center"
+                          >
+                            {name}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scoreHistory.map((scoreRow, rowIndex) => (
+                        <tr key={rowIndex}>
+                          {scoreRow.map((score, index) => (
+                            <td
+                              key={index}
+                              className="border px-4 py-2 text-center"
+                            >
+                              {score} poena
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )} */}
             </>
           )}
         </CardContent>
