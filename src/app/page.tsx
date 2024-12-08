@@ -339,6 +339,9 @@ const Page = () => {
                 >
                   <RotateCcw />
                 </Button>
+                <Button className="w-1/6 bg-purple-500 hover:bg-purple-400">
+                  P.S.
+                </Button>
               </div>
               {/* {showScores && (
                 <div className="mt-4">
