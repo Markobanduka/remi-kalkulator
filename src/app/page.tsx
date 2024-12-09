@@ -28,6 +28,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 const chartConfig = {
   visitors: {
     label: "Rezultat",
@@ -56,8 +67,8 @@ const Page = () => {
     useState(currentPersonIndex);
   const [isUndoDisabled, setIsUndoDisabled] = useState(true);
 
-  // const [showScores, setShowScores] = useState(true);
-  // const [scoreHistory, setScoreHistory] = useState<any[]>([]);
+  const [showScores, setShowScores] = useState(true);
+  const [scoreHistory, setScoreHistory] = useState<number[][]>([]);
 
   const minValue = Math.min(...chartData.map((item) => item.visitors));
   const maxValue = Math.max(...chartData.map((item) => item.visitors));
@@ -89,10 +100,10 @@ const Page = () => {
         month: names[index] || `Igrač ${index + 1}`,
       }))
     );
-    // setScoreHistory((prevHistory) => [
-    //   ...prevHistory,
-    //   chartData.map((item) => item.visitors),
-    // ]);
+    setScoreHistory((prevHistory) => [
+      ...prevHistory,
+      chartData.map((item) => item.visitors),
+    ]);
 
     setIsNameSet(true);
   };
@@ -100,14 +111,12 @@ const Page = () => {
     const numValue = parseInt(value, 10) || 0;
     setInputValues((prev) => ({ ...prev, [month]: numValue }));
   };
-  // useEffect(() => {
-  //   if (chartData.length > 0) {
-  //     setScoreHistory((prevHistory) => [
-  //       ...prevHistory,
-  //       chartData.map((item) => item.visitors),
-  //     ]);
-  //   }
-  // }, [chartData]);
+  const addScoreToHistory = () => {
+    setScoreHistory((prevHistory) => [
+      ...prevHistory,
+      chartData.map((item) => item.visitors),
+    ]);
+  };
 
   const handleSubmit = () => {
     setPreviousChartData([...chartData]);
@@ -130,9 +139,9 @@ const Page = () => {
       };
     });
 
-    // setChartData(updatedChartData);
-
     setChartData(updatedChartData);
+    addScoreToHistory();
+
     setInputValues({});
     setPreviousPersonIndex(currentPersonIndex);
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
@@ -329,7 +338,12 @@ const Page = () => {
                 ))}
               </div>
               <div className="flex space-x-4 mt-4">
-                <Button onClick={handleSubmit} className="w-full">
+                <Button
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  className="w-full"
+                >
                   Izracunaj
                 </Button>
                 <Button
@@ -339,42 +353,70 @@ const Page = () => {
                 >
                   <RotateCcw />
                 </Button>
-                <Button className="w-1/6 bg-purple-500 hover:bg-purple-400">
-                  P.S.
-                </Button>
+                <Dialog>
+                  <DialogTrigger className="w-1/6 bg-purple-500 hover:bg-purple-400 text-white py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-slate-300">
+                    Skor
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Skor</DialogTitle>
+                      <DialogDescription>
+                        <ScrollArea className="h-[500px]">
+                          {showScores ? (
+                            <div className="mt-4">
+                              <table className="w-full table-auto border-collapse border border-gray-200">
+                                <thead>
+                                  <tr>
+                                    <th className="border px-4 py-2 text-center">
+                                      Runda
+                                    </th>{" "}
+                                    {/* Add "Runda" column */}
+                                    {names.map((name, index) => (
+                                      <th
+                                        key={index}
+                                        className="border px-4 py-2 text-center"
+                                      >
+                                        {name}
+                                      </th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {scoreHistory.map((scoreRow, rowIndex) => (
+                                    <tr key={rowIndex}>
+                                      <td className="border px-4 py-2 text-center font-bold">
+                                        Runda {rowIndex + 1}{" "}
+                                        {/* Add the round number */}
+                                      </td>
+                                      {scoreRow.map((score, index) => (
+                                        <td
+                                          key={index}
+                                          className="border px-4 py-2 text-center"
+                                        >
+                                          {score} poena
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ) : (
+                            <p className="text-gray-500">Scores are hidden</p>
+                          )}
+                        </ScrollArea>
+                        {/* Toggle Button */}
+                        <button
+                          onClick={() => setShowScores((prev) => !prev)}
+                          className="mt-4 bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded"
+                        >
+                          {showScores ? "Hide Scores" : "Show Scores"}
+                        </button>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </div>
-              {/* {showScores && (
-                <div className="mt-4">
-                  <table className="w-full table-auto">
-                    <thead>
-                      <tr>
-                        {names.map((name, index) => (
-                          <th
-                            key={index}
-                            className="border px-4 py-2 text-center"
-                          >
-                            {name}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {scoreHistory.map((scoreRow, rowIndex) => (
-                        <tr key={rowIndex}>
-                          {scoreRow.map((score, index) => (
-                            <td
-                              key={index}
-                              className="border px-4 py-2 text-center"
-                            >
-                              {score} poena
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )} */}
             </>
           )}
         </CardContent>
