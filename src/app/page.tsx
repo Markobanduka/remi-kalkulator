@@ -73,7 +73,6 @@ const Page = () => {
   const minValue = Math.min(...chartData.map((item) => item.visitors));
   const maxValue = Math.max(...chartData.map((item) => item.visitors));
 
-  // Handle name change during the setup
   const handleNameChange = (index: number, value: string) => {
     setNames((prevNames) => {
       const updatedNames = [...prevNames];
@@ -82,7 +81,6 @@ const Page = () => {
     });
   };
 
-  // Handle removing a player during the setup
   const handleRemovePlayer = (index: number) => {
     if (names.length > 1) {
       setNames((prevNames) => prevNames.filter((_, i) => i !== index));
