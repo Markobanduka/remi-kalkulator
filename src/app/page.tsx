@@ -70,9 +70,16 @@ const Page = () => {
   const [showScores, setShowScores] = useState(true);
   const [scoreHistory, setScoreHistory] = useState<number[][]>([]);
 
-  const minValue = Math.min(...chartData.map((item) => item.visitors));
-  const maxValue = Math.max(...chartData.map((item) => item.visitors));
+  const visitors: number[] = chartData.map((item) => item.visitors);
+  const minValue: number = Math.min(...visitors);
+  const maxValue: number = Math.max(...visitors);
 
+  const remainingValues: number[] = visitors
+    .filter((value) => value !== minValue && value !== maxValue)
+    .sort((a, b) => a - b);
+
+  const lowerRemainingValue: number | undefined = remainingValues[0];
+  const higherRemainingValue: number | undefined = remainingValues[1];
   const handleNameChange = (index: number, value: string) => {
     setNames((prevNames) => {
       const updatedNames = [...prevNames];
@@ -283,18 +290,20 @@ const Page = () => {
                       fill="hsl(var(--primary-foreground))"
                       style={{ fontWeight: "bold", fontSize: "48px" }}
                     />
-                    {chartData.map((item) => (
-                      <Cell
-                        key={item.month}
-                        fill={
-                          item.visitors === minValue
-                            ? "hsl(var(--primary))"
-                            : item.visitors === maxValue
-                            ? "hsl(var(--destructive))"
-                            : "hsl(var(--blue))"
-                        }
-                      />
-                    ))}
+                    {chartData.map((item) => {
+                      const fillColor =
+                        item.visitors === minValue
+                          ? "hsl(var(--primary))" // Minimum value color
+                          : item.visitors === maxValue
+                          ? "hsl(var(--destructive))" // Maximum value color
+                          : item.visitors === lowerRemainingValue
+                          ? "hsl(var(--blue))" // Lower remaining value color
+                          : item.visitors === higherRemainingValue
+                          ? "hsl(30, 80%, 60%)" // Higher remaining value color
+                          : "hsl(var(--neutral))"; // Optional fallback color
+
+                      return <Cell key={item.month} fill={fillColor} />;
+                    })}
                   </Bar>
                 </BarChart>
               </ChartContainer>
