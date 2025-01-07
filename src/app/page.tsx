@@ -293,15 +293,14 @@ const Page = () => {
                     {chartData.map((item) => {
                       const fillColor =
                         item.visitors === minValue
-                          ? "hsl(var(--primary))" // Minimum value color
+                          ? "hsl(var(--primary))"
                           : item.visitors === maxValue
-                          ? "hsl(var(--destructive))" // Maximum value color
+                          ? "hsl(var(--destructive))"
                           : item.visitors === lowerRemainingValue
-                          ? "hsl(var(--blue))" // Lower remaining value color
+                          ? "hsl(var(--blue))"
                           : item.visitors === higherRemainingValue
-                          ? "hsl(30, 80%, 60%)" // Higher remaining value color
-                          : "hsl(var(--neutral))"; // Optional fallback color
-
+                          ? "hsl(30, 80%, 60%)"
+                          : "hsl(var(--neutral))";
                       return <Cell key={item.month} fill={fillColor} />;
                     })}
                   </Bar>
@@ -377,7 +376,6 @@ const Page = () => {
                                     <th className="border px-4 py-2 text-center">
                                       Runda
                                     </th>{" "}
-                                    {/* Add "Runda" column */}
                                     {names.map((name, index) => (
                                       <th
                                         key={index}
@@ -393,7 +391,6 @@ const Page = () => {
                                     <tr key={rowIndex}>
                                       <td className="border px-4 py-2 text-center font-bold">
                                         Runda {rowIndex + 1}{" "}
-                                        {/* Add the round number */}
                                       </td>
                                       {scoreRow.map((score, index) => (
                                         <td
@@ -412,7 +409,7 @@ const Page = () => {
                             <p className="text-gray-500">Scores are hidden</p>
                           )}
                         </ScrollArea>
-                        {/* Toggle Button */}
+
                         <button
                           onClick={() => setShowScores((prev) => !prev)}
                           className="mt-4 bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded"
