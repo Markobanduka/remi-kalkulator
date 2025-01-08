@@ -97,7 +97,6 @@ const Page = () => {
     }
   };
 
-  // Handle adding names to chart data after setup
   const handleSetNames = () => {
     setChartData(
       chartData.map((item, index) => ({
@@ -187,11 +186,9 @@ const Page = () => {
       setTimeout(() => setShowConfetti(false), 25000);
     }, timeUntil11PM);
 
-    // Return the timeout ID for cleanup
     return timeoutId;
   };
   useEffect(() => {
-    // Initialize audio only on the client side
     const audioInstance = new Audio(audioFilePath);
     setAudio(audioInstance);
 
@@ -199,7 +196,7 @@ const Page = () => {
       const timeoutId = scheduleAlertAt11PM();
       return () => clearTimeout(timeoutId);
     }
-  }, [isNameSet, chartData]); // Re-run if names are set or data changes
+  }, [isNameSet, chartData]);
 
   return (
     <div className="flex justify-center items-center h-screen">
