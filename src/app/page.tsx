@@ -45,7 +45,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const audioFilePath = "/ljuba.mp3";
+const audioFilePath = "/zal.mp3";
 
 const Page = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
