@@ -67,7 +67,6 @@ const Page = () => {
     useState(currentPersonIndex);
   const [isUndoDisabled, setIsUndoDisabled] = useState(true);
 
-  const [showScores, setShowScores] = useState(true);
   const [scoreHistory, setScoreHistory] = useState<number[][]>([]);
 
   const visitors: number[] = chartData.map((item) => item.visitors);
@@ -104,10 +103,6 @@ const Page = () => {
         month: names[index] || `Igrač ${index + 1}`,
       }))
     );
-    setScoreHistory((prevHistory) => [
-      ...prevHistory,
-      chartData.map((item) => item.visitors),
-    ]);
 
     setIsNameSet(true);
   };
@@ -115,24 +110,25 @@ const Page = () => {
     const numValue = parseInt(value, 10) || 0;
     setInputValues((prev) => ({ ...prev, [month]: numValue }));
   };
-  const addScoreToHistory = () => {
-    setScoreHistory((prevHistory) => [
-      ...prevHistory,
-      chartData.map((item) => item.visitors),
-    ]);
+  const addScoreToHistory = (roundInputs: number[]) => {
+    setScoreHistory((prevHistory) => [...prevHistory, roundInputs]);
   };
 
   const handleSubmit = () => {
     setPreviousChartData([...chartData]);
+
+    const roundInputs = chartData.map((item) => inputValues[item.month] || 0);
+
     const updatedChartData = chartData.map((item) => {
-      const updatedVisitors = item.visitors + (inputValues[item.month] || 0);
+      const addedValue = inputValues[item.month] || 0;
+      const updatedVisitors = item.visitors + addedValue;
 
       let hand = item.hands;
       let newWins = item.wins;
-      if (inputValues[item.month] < 0) {
+      if (addedValue < 0) {
         newWins += 1;
       }
-      if (inputValues[item.month] < -50) {
+      if (addedValue < -50) {
         hand += 1;
       }
       return {
@@ -144,7 +140,9 @@ const Page = () => {
     });
 
     setChartData(updatedChartData);
-    addScoreToHistory();
+
+    // ⬅️ save inputs instead of totals
+    addScoreToHistory(roundInputs);
 
     setInputValues({});
     setPreviousPersonIndex(currentPersonIndex);
@@ -156,6 +154,8 @@ const Page = () => {
     setChartData(previousChartData);
     setCurrentPersonIndex(previousPersonIndex);
     setIsUndoDisabled(true);
+
+    setScoreHistory((prevHistory) => prevHistory.slice(0, -1));
   };
 
   const scheduleAlertAt11PM = () => {
@@ -365,54 +365,56 @@ const Page = () => {
                       <DialogTitle>Skor</DialogTitle>
                       <DialogDescription>
                         <ScrollArea className="h-[500px]">
-                          {showScores ? (
-                            <div className="mt-4">
-                              <table className="w-full table-auto border-collapse border border-gray-200">
-                                <thead>
-                                  <tr>
-                                    <th className="border px-4 py-2 text-center">
-                                      Runda
-                                    </th>{" "}
-                                    {names.map((name, index) => (
-                                      <th
-                                        key={index}
-                                        className="border px-4 py-2 text-center"
-                                      >
-                                        {name}
-                                      </th>
-                                    ))}
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {scoreHistory.map((scoreRow, rowIndex) => (
-                                    <tr key={rowIndex}>
-                                      <td className="border px-4 py-2 text-center font-bold">
-                                        Runda {rowIndex + 1}{" "}
-                                      </td>
-                                      {scoreRow.map((score, index) => (
-                                        <td
-                                          key={index}
-                                          className="border px-4 py-2 text-center"
-                                        >
-                                          {score} poena
-                                        </td>
-                                      ))}
-                                    </tr>
+                          <div className="mt-4">
+                            <table className="w-full table-auto border-collapse border border-gray-200">
+                              <thead>
+                                <tr>
+                                  <th className="border px-4 py-2 text-center">
+                                    Runda
+                                  </th>
+                                  {names.map((name, index) => (
+                                    <th
+                                      key={index}
+                                      className="border px-4 py-2 text-center"
+                                    >
+                                      {name}
+                                    </th>
                                   ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          ) : (
-                            <p className="text-gray-500">Scores are hidden</p>
-                          )}
-                        </ScrollArea>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {scoreHistory.map((scoreRow, rowIndex) => (
+                                  <tr key={rowIndex}>
+                                    <td className="border px-4 py-2 text-center font-bold">
+                                      Runda {rowIndex + 1}
+                                    </td>
+                                    {scoreRow.map((score, index) => {
+                                      let cellClass =
+                                        "border px-4 py-2 text-center";
 
-                        <button
-                          onClick={() => setShowScores((prev) => !prev)}
-                          className="mt-4 bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded"
-                        >
-                          {showScores ? "Hide Scores" : "Show Scores"}
-                        </button>
+                                      if (score === 200) {
+                                        cellClass += " bg-black text-white";
+                                      } else if (score === 100) {
+                                        cellClass += " bg-red-500 text-white";
+                                      } else if (score === -120) {
+                                        cellClass += " bg-green-500 text-white";
+                                      } else if (score === -80) {
+                                        cellClass +=
+                                          " bg-yellow-300 text-black";
+                                      }
+
+                                      return (
+                                        <td key={index} className={cellClass}>
+                                          {score}
+                                        </td>
+                                      );
+                                    })}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </ScrollArea>
                       </DialogDescription>
                     </DialogHeader>
                   </DialogContent>
