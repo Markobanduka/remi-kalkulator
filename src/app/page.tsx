@@ -61,6 +61,7 @@ const Page = () => {
   const [isNameSet, setIsNameSet] = useState(false);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const [previousChartData, setPreviousChartData] = useState(chartData);
   const [previousPersonIndex, setPreviousPersonIndex] =
@@ -115,6 +116,7 @@ const Page = () => {
   };
 
   const handleSubmit = () => {
+    setIsDisabled(true);
     setPreviousChartData([...chartData]);
 
     const roundInputs = chartData.map((item) => inputValues[item.month] || 0);
@@ -148,6 +150,12 @@ const Page = () => {
     setPreviousPersonIndex(currentPersonIndex);
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
     setIsUndoDisabled(false);
+
+     setTimeout(() => {
+      setIsDisabled(false);
+    }, 3000);
+
+    
   };
 
   const handleUndo = () => {
@@ -346,6 +354,7 @@ const Page = () => {
                     handleSubmit();
                   }}
                   className="w-full"
+                   disabled={isDisabled}
                 >
                   Izracunaj
                 </Button>
