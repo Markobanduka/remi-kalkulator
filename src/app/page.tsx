@@ -143,7 +143,6 @@ const Page = () => {
 
     setChartData(updatedChartData);
 
-    // ⬅️ save inputs instead of totals
     addScoreToHistory(roundInputs);
 
     setInputValues({});
@@ -151,11 +150,9 @@ const Page = () => {
     setCurrentPersonIndex((prevIndex) => (prevIndex + 1) % chartData.length);
     setIsUndoDisabled(false);
 
-     setTimeout(() => {
+    setTimeout(() => {
       setIsDisabled(false);
     }, 3000);
-
-    
   };
 
   const handleUndo = () => {
@@ -354,7 +351,7 @@ const Page = () => {
                     handleSubmit();
                   }}
                   className="w-full"
-                   disabled={isDisabled}
+                  disabled={isDisabled}
                 >
                   Izracunaj
                 </Button>
@@ -400,17 +397,17 @@ const Page = () => {
                                     {scoreRow.map((score, index) => {
                                       let cellClass =
                                         "border px-4 py-2 text-center";
-
-                                      if (score === 200) {
-                                        cellClass += " bg-black text-white";
-                                      } else if (score === 100) {
-                                        cellClass += " bg-red-500 text-white";
-                                      } else if (score === -120) {
-                                        cellClass += " bg-green-500 text-white";
-                                      } else if (score === -80) {
-                                        cellClass +=
-                                          " bg-yellow-300 text-black";
-                                      }
+if (score === 200) {
+  cellClass += " bg-black text-white"; 
+} else if (score === 100) {
+ cellClass += " bg-red-500 text-white";
+} else if (score === -40) {
+   cellClass += " bg-green-400 text-white"; 
+} else if (score === -80) {
+  cellClass += " bg-yellow-300 text-black"; 
+} else if (score === -120) {
+  cellClass += " bg-green-600 text-white"; 
+}
 
                                       return (
                                         <td key={index} className={cellClass}>
