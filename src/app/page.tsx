@@ -325,14 +325,17 @@ const Page = () => {
                       {item.month}
                     </Label>
                     <Input
-                      id={`input-${item.month}`}
-                      type="number"
-                      placeholder="Unesi"
-                      value={inputValues[item.month] || ""}
-                      onChange={(e) =>
-                        handleInputChange(item.month, e.target.value)
+                     id={`input-${item.month}`}
+                     type="text"
+                     inputMode="numeric"
+                     pattern="-?[0-9]*"
+                     placeholder="Unesi"
+                     value={inputValues[item.month] ?? ""}
+                     onChange={(e) =>
+                      handleInputChange(item.month, e.target.value)
                       }
                     />
+
                     <div className="text-sm text-gray-500 font-bold">
                       Pobede:{" "}
                       <span className="font-bold font-mono text-xl">
