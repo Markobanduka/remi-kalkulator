@@ -327,8 +327,7 @@ const Page = () => {
                     <Input
                      id={`input-${item.month}`}
                      type="text"
-                     inputMode="numeric"
-                     pattern="-?[0-9]*"
+                     inputMode="text"
                      placeholder="Unesi"
                      value={inputValues[item.month] ?? ""}
                      onChange={(e) =>
